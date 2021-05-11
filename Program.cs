@@ -1,9 +1,17 @@
+
 using System;
 using System.Threading;
 
 namespace L7
 {
- 
+    public class Prin : EventArgs
+    {
+        public int log
+        {
+            get;
+            set;
+        }
+    }
     public class Server
     {
         public int appeal = 0;
@@ -13,7 +21,7 @@ namespace L7
         static Pool[] pool;
         struct Pool
         {
-            
+
             public bool use;
             public int count;
             public int wait;
@@ -42,14 +50,7 @@ namespace L7
                 }
         }
 
-        public class Prin : Pr
-        {
-            public int log 
-            {
-                get;
-                set;
-            }
-        }
+
 
         public int Get_W(int n)
         {
@@ -59,7 +60,7 @@ namespace L7
         {
             return pool[n].count;
         }
-        
+
         object threadLock = new object();
         public void proc(object sender, Prin e)
         {
@@ -114,6 +115,7 @@ namespace L7
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("======================================================\n");
             long fun(int n)
             {
                 long x = 1;
@@ -130,12 +132,17 @@ namespace L7
                 client[i] = new Client(server);
                 client[i].sendRequest(i + 1);
             }
+
             Thread.Sleep(200);
             Console.WriteLine($"In total : {server.appeal}. Done: {server.treated}. Rejected: {server.outlaw}");
+
+            Console.WriteLine("======================================================\n");
             for (int i = 0; i < svIntens; ++i)
             {
                 Console.WriteLine($"Flow {i + 1} done {server.Get_C(i)} applications. Downtime {server.Get_W(i)} ");
             }
+
+
 
             double p = (double)clIntens / svIntens;
             double P_n = 0;
@@ -148,12 +155,14 @@ namespace L7
             double FF = 1 - Pn;
             double A = clIntens * FF;
             double k = A / svIntens;
+            Console.WriteLine("======================================================\n");
             Console.WriteLine($"Reduced application flow rate: {p}");
             Console.WriteLine($"Probability of system downtime: {P_n}");
             Console.WriteLine($"System failure probability: {Pn}");
             Console.WriteLine($"Average number of busy channels: {k}");
             Console.WriteLine($"Relative throughput: {FF}");
             Console.WriteLine($"Absolute throughput: {A}");
+            Console.WriteLine("======================================================\n");
 
             Console.ReadKey();
         }
